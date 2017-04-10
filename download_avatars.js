@@ -1,6 +1,8 @@
 // DEPENDENCIES
 var request = require('request');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
+var getDirName = require('path').dirname;
 
 // CONSTANTS
 var GITHUB_USER = "SarriElek";
@@ -14,24 +16,30 @@ var repoName = "jquery";
 var cb = function(err, response, body){
   var constributors = JSON.parse(body);
   constributors.forEach((contributor) => {
+    // create the local filepath for downloading the image
+    var filePath = `avatars/${contributor['login']}.jpg`;
     // download the avatar images
-    console.log(contributor['avatar_url']);
+    downloadImageByURL(contributor['avatar_url'], filePath)
   });
 };
 
-// HELPER FUNCTIONS
+// HELPER FUNCTION
 function downloadImageByURL(url, filePath) {
+  // see if the given directory exists, if not create it
+  mkdirp(getDirName(filePath), function (err) {
+    if (err)
+      throw err;
+  });
+
+  // make the request for downloading the image
   request.get(url)
        .on('error', function (err) {
          throw err;
        })
        .pipe(fs.createWriteStream(filePath))
        .on('finish', function(){
-        console.log('Download complete.');
       });
 }
-
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "kvirani.jpg");
 
 
 // WELCOME
