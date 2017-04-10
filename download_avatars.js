@@ -25,6 +25,24 @@ function getRepoContributors(repoOwner, repoName, cb) {
   //format the URL with the given variables
   var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
 
+  // set our custom options for the request
+  var options = {
+    url: requestURL,
+    headers: {
+      'User-Agent': 'GitHub Avatar Downloader - Student Project'
+    }
+  };
+  request.get(options)
+      .on('error', function (err) {
+        throw err;
+        console.error(err);
+      })
+      .on('response', function (response) {
+        console.log('Response Status Code: ', response.statusCode);
+        console.log('Response Status Message: ', response.statusMessage);
+        console.log('Response Content Type: ', response.headers['content-type']);
+      });
+
 }
 
 // CALL OUR FUNCTIION
