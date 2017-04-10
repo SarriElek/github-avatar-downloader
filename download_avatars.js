@@ -9,8 +9,9 @@ var GITHUB_USER = "SarriElek";
 var GITHUB_TOKEN = "6179f8595adbefe65f64a10b78603cd49dbf5910";
 
 // VARIABLES
-var repoOwner = "jquery";
-var repoName = "jquery";
+var repoOwner = process.argv[2];
+var repoName = process.argv[3];
+
 
 // CALLBACK FUNCTION
 var cb = function(err, response, body){
@@ -63,5 +64,9 @@ function getRepoContributors(repoOwner, repoName, cb) {
   request.get(options, cb);
 }
 
-// CALL OUR FUNCTIION
-getRepoContributors(repoOwner, repoName, cb);
+if(repoOwner && repoName){
+  // CALL OUR FUNCTIION
+  getRepoContributors(repoOwner, repoName, cb);
+}else{
+  console.log('Please enter both parameters, repository owner and repository name');
+}
