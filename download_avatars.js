@@ -1,5 +1,6 @@
 // DEPENDENCIES
 var request = require('request');
+var fs = require('fs');
 
 // CONSTANTS
 var GITHUB_USER = "SarriElek";
@@ -13,9 +14,25 @@ var repoName = "jquery";
 var cb = function(err, response, body){
   var constributors = JSON.parse(body);
   constributors.forEach((contributor) => {
+    // download the avatar images
     console.log(contributor['avatar_url']);
   });
+};
+
+// HELPER FUNCTIONS
+function downloadImageByURL(url, filePath) {
+  request.get(url)
+       .on('error', function (err) {
+         throw err;
+       })
+       .pipe(fs.createWriteStream(filePath))
+       .on('finish', function(){
+        console.log('Download complete.');
+      });
 }
+
+downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "kvirani.jpg");
+
 
 // WELCOME
 console.log('Welcome to the GitHub Avatar Downloader!');
@@ -25,7 +42,8 @@ console.log('Welcome to the GitHub Avatar Downloader!');
 
 function getRepoContributors(repoOwner, repoName, cb) {
   //format the URL with the given variables
-  var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
+  var requestURL = `https://${GITHUB_USER}:${GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`;
+  //var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
   // set our custom options for the request
   var options = {
     url: requestURL,
