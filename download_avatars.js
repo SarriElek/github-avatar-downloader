@@ -1,9 +1,8 @@
+// CONFIG FILE
+require('dotenv').config();
 // DEPENDENCIES
 var request = require('request');
 var fs = require('fs');
-
-// CONFIG FILE
-var config = require('./config');
 
 // MODULES
 var downloadImageByURL = require('./http-functions');
@@ -33,7 +32,7 @@ console.log('Welcome to the GitHub Avatar Downloader!');
 
 function getRepoContributors(repoOwner, repoName, cb) {
   //format the URL with the given variables
-  var requestURL = `https://${config.GITHUB_USER}:${config.GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`;
+  var requestURL = `https://${process.env.GITHUB_USER}:${process.env.GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`;
   // set our custom options for the request
   var options = {
     url: requestURL,
