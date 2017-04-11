@@ -11,16 +11,14 @@ function downloadImageByURL(url, filePath) {
   // see if the given directory exists, if not create it
   mkdirp(getDirName(filePath), (err) => {
       if (err){
-        throw err;
+        console.error('Error creating the directory',err.message);
       }else{
         // make the request for downloading the image
         request.get(url)
            .on('error', function (err) {
-             throw err;
+             console.error('Error downloading the avatar image', err.message);
            })
-           .pipe(createFile(filePath))
-           .on('finish', function(){
-          });
+           .pipe(createFile(filePath));
       }
     });
 }
